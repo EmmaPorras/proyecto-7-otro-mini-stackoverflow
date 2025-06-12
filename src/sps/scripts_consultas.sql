@@ -1,46 +1,53 @@
---a) Votar una pregunta (insertar o actualizar voto)
+-- 1)  Consulta para votar una pregunta.
 MERGE Votos AS target
-USING (SELECT 3 AS UsuarioID, 'Pregunta' AS TipoObjeto, 1 AS ObjetoID, 1 AS Valor) AS source
-ON target.UsuarioID = source.UsuarioID AND target.TipoObjeto = source.TipoObjeto AND target.ObjetoID = source.ObjetoID
+USING (SELECT 3 AS id_usuario, 'Pregunta' AS tipo_objeto, 2 AS id_pregunta, NULL AS id_respuesta, 1 AS tipo_voto) AS source
+ON target.id_usuario = source.id_usuario AND target.tipo_objeto = source.tipo_objeto AND target.id_pregunta = source.id_pregunta
 WHEN MATCHED THEN
-    UPDATE SET Valor = source.Valor, FechaVoto = GETDATE()
+    UPDATE SET tipo_voto = source.tipo_voto, fecha_voto = GETDATE()
 WHEN NOT MATCHED THEN
-    INSERT (UsuarioID, TipoObjeto, ObjetoID, Valor) VALUES (source.UsuarioID, source.TipoObjeto, source.ObjetoID, source.Valor);
+    INSERT (id_usuario, tipo_objeto, id_pregunta, id_respuesta, tipo_voto) 
+    VALUES (source.id_usuario, source.tipo_objeto, source.id_pregunta, source.id_respuesta, source.tipo_voto);
+GO
 
- --b) Preguntas sin responder
-    SELECT p.*
+-- 2) Consulta que permita obtener las preguntas sin responder.
+SELECT p.*
 FROM Preguntas p
-LEFT JOIN Respuestas r ON p.PreguntaID = r.PreguntaID
-WHERE r.PreguntaID IS NULL;
+LEFT JOIN Respuestas r ON p.id_pregunta = r.id_pregunta
+WHERE r.id_pregunta IS NULL;
+GO
 
---c) Respuestas de una pregunta
+-- 3) Consulta que obtenga las respuestas de las preguntas. 
 SELECT r.*
 FROM Respuestas r
-WHERE r.PreguntaID = 1; -- Cambiar ID según pregunta
+WHERE r.id_pregunta = 2;
+GO
 
---d) Usuarios que más han aportado preguntas
-SELECT u.Nombre, COUNT(p.PreguntaID) AS TotalPreguntas
+-- 4) consulta que obtenga la lista de usuarios que más han aportado preguntas
+SELECT u.nombre, COUNT(p.id_pregunta) AS TotalPreguntas
 FROM Usuarios u
-JOIN Preguntas p ON u.UsuarioID = p.UsuarioID
-GROUP BY u.Nombre
-ORDER BY TotalPreguntas DESC;
+JOIN Preguntas p ON u.id_usuario = p.id_usuario
+GROUP BY u.nombre
+ORDER BY TotalPreguntas DESC;
+GO
 
---e) Crear o actualizar una pregunta
+-- 5)  Consulta que permita crear o actualizar una pregunta. 
 -- Crear nueva
-INSERT INTO Preguntas (UsuarioID, Titulo, Contenido) VALUES (1, 'Título nuevo', 'Contenido de la pregunta');
+INSERT INTO Preguntas (id_usuario, titulo, contenido) VALUES (1, 'Título nuevo', 'Contenido de la pregunta');
+GO
 
 -- Actualizar existente
 UPDATE Preguntas
-SET Titulo = 'Nuevo título', Contenido = 'Nuevo contenido'
-WHERE PreguntaID = 1;
+SET titulo = 'Nuevo título', contenido = 'Nuevo contenido'
+WHERE id_pregunta = 2;
+GO
 
---f) Agregar una respuesta
-INSERT INTO Respuestas (PreguntaID, UsuarioID, Contenido) 
-VALUES (1, 2, 'Esta es una nueva respuesta.');
+-- 6) Consulta que permita agregar una respuesta a una pregunta. 
+INSERT INTO Respuestas (id_pregunta, id_usuario, contenido) 
+VALUES (2, 2, 'Esta es una nueva respuesta.'); 
+GO
 
---g) Archivar una pregunta
-UPDATE Preguntas SET Archivada = 1 WHERE PreguntaID = 1;
-
-INSERT INTO Archivos (PreguntaID, Motivo)
-VALUES (1, 'La pregunta ya no es relevante.');
-
+-- 7)  Consulta que permita archivar una pregunta indicando las razones.
+UPDATE Preguntas SET archivada = 1 WHERE id_pregunta = 2;
+INSERT INTO Archivos (id_pregunta, motivo)
+VALUES (2, 'La pregunta ya no es relevante.');
+GO
