@@ -7,10 +7,6 @@ GO
 USE MiniStackOverflow;
 GO
 
-BACKUP DATABASE MiniStackOverflow
-TO DISK = 'C:\ruta\a\tu\proyecto\src\backup\NombreDeTuBaseDeDatos.bak'
-WITH FORMAT, INIT;
-
 -- Tabla de Usuarios
 CREATE TABLE Usuarios (
 id_usuario INT IDENTITY(1,1),
