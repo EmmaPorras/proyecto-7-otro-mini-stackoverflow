@@ -4,7 +4,7 @@ ON Preguntas
 AFTER INSERT
 AS
 BEGIN
-    INSERT INTO Auditoria (id_usuario, tabla_afectada, operacion, descripcion)
+    INSERT INTO Auditoria (id_usuario, tabla_afectada, operacion, descripcion)-- Datos a insertar
     SELECT i.id_usuario, 'Preguntas', 'INSERT', CONCAT('id_pregunta: ', i.id_pregunta, ', titulo: ', i.titulo)
     FROM inserted i;
 END;
@@ -16,7 +16,7 @@ ON Respuestas
 AFTER UPDATE
 AS
 BEGIN
-    INSERT INTO Auditoria (id_usuario, tabla_afectada, operacion, descripcion)
+    INSERT INTO Auditoria (id_usuario, tabla_afectada, operacion, descripcion) -- Datos a insertar
     SELECT i.id_usuario, 'Respuestas', 'UPDATE', CONCAT('id_respuesta: ', i.id_respuesta, ', contenido modificado')
     FROM inserted i;
 END;
