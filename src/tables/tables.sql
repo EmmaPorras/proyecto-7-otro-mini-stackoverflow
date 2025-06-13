@@ -9,13 +9,13 @@ GO
 
 -- Tabla de Usuarios
 CREATE TABLE Usuarios (
-id_usuario INT IDENTITY(1,1),
-nombre VARCHAR(50) NOT NULL,
-primer_apellido VARCHAR(50) NOT NULL,
-segundo_apellido VARCHAR(50) NOT NULL,
-correo VARCHAR(50) UNIQUE NOT NULL,
-fecha_registro DATETIME DEFAULT GETDATE(),
-CONSTRAINT pk_usuarios PRIMARY KEY (id_usuario)
+    id_usuario INT IDENTITY(1,1),
+    nombre VARCHAR(50) NOT NULL,
+    primer_apellido VARCHAR(50) NOT NULL,
+    segundo_apellido VARCHAR(50) NOT NULL,
+    correo VARCHAR(50) UNIQUE NOT NULL,
+    fecha_registro DATETIME DEFAULT GETDATE(),
+    CONSTRAINT pk_usuarios PRIMARY KEY (id_usuario)
 );
 
 -- Tabla de Preguntas
@@ -92,3 +92,4 @@ GO
 ALTER TABLE Respuestas
 ALTER COLUMN contenido NVARCHAR(MAX) NOT NULL;
 GO
+

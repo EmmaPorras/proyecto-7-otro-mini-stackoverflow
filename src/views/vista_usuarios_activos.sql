@@ -18,3 +18,4 @@ GO
 
 -- Para ver los datos de la vista
 SELECT * FROM Vista_UsuariosActivos;
+GO
